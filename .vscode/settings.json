@@ -1,0 +1,34 @@
+{
+  "editor.fontSize": 16,
+  "editor.tabSize": 2,
+  "editor.fontFamily": "Monaco",
+  // "files.autoSave": "onFocusChange",
+  "files.eol": "\n", // formatting only supports LF line endings
+  "files.saveConflictResolution": "overwriteFileOnDisk",
+  "editor.formatOnSave": true,
+
+  // extension : prettier
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+
+  // go language  settings
+  "go.testFlags": ["-v", "-count=1"],
+  "go.testTimeout": "0",
+  "go.lintFlags": [],
+  "go.lintOnSave": "off", // disable lint
+  "go.formatTool": "goimports",
+  "go.formatFlags": [],
+  "go.autocompleteUnimportedPackages": true,
+  "go.useLanguageServer": false,
+
+  // goimports not working on saving files, using other extension to do it
+  // extension : runonsave
+  "emeraldwalk.runonsave": {
+    "commands": [
+      {
+        "match": "\\.go$",
+        // "cmd": "echo 'I am a .go file ${file}.' >> ~/Downloads/a.txt"
+        "cmd": "goimports -w '${file}'"
+      }
+    ]
+  }
+}
