@@ -5,8 +5,8 @@ import (
 	"io/ioutil"
 	"os"
 
+	"github.com/nece099/base/daemon"
 	"github.com/sirupsen/logrus"
-	"github.com/zen099/onetube/server/base/daemon"
 	lumberjack "gopkg.in/natefinch/lumberjack.v2"
 )
 

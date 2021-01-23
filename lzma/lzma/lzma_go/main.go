@@ -15,7 +15,7 @@ import (
 	"runtime"
 	"strings"
 
-	"github.com/zen099/onetube/server/base/lzma/lzma"
+	"github.com/nece099/base/lzma/lzma"
 )
 
 var (

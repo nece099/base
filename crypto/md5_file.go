@@ -23,7 +23,7 @@ import (
 	"io"
 	"os"
 
-	. "github.com/zen099/onetube/server/base/logger"
+	. "github.com/nece099/base/logger"
 )
 
 // TODO(@benqi): remove to baselib

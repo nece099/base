@@ -20,7 +20,7 @@ package redis_client
 import (
 	"fmt"
 
-	. "github.com/zen099/onetube/server/base/logger"
+	. "github.com/nece099/base/logger"
 )
 
 type redisClientManager struct {

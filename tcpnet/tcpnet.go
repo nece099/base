@@ -6,9 +6,9 @@ import (
 	"net"
 	"sync"
 
-	"github.com/zen099/onetube/server/base/grmon"
-	"github.com/zen099/onetube/server/base/guid"
-	. "github.com/zen099/onetube/server/base/logger"
+	"github.com/nece099/base/grmon"
+	"github.com/nece099/base/guid"
+	. "github.com/nece099/base/logger"
 )
 
 type TcpContext struct {

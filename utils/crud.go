@@ -1,7 +1,7 @@
 package utils
 
 import (
-	"github.com/zen099/onetube/server/base/datasource"
+	"github.com/nece099/base/datasource"
 
 	"github.com/jinzhu/gorm"
 )

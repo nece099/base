@@ -6,10 +6,10 @@ import (
 
 	"time"
 
-	"github.com/zen099/onetube/server/base/crypto"
-	"github.com/zen099/onetube/server/base/datasource"
-	"github.com/zen099/onetube/server/base/grmon"
-	"github.com/zen099/onetube/server/base/utils"
+	"github.com/nece099/base/crypto"
+	"github.com/nece099/base/datasource"
+	"github.com/nece099/base/grmon"
+	"github.com/nece099/base/utils"
 )
 
 type Model struct {

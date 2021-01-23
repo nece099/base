@@ -6,7 +6,7 @@ import (
 	"net/http"
 	"path"
 
-	"github.com/zen099/onetube/server/base/crypto"
+	"github.com/nece099/base/crypto"
 )
 
 func DownloadFile(url string) ([]byte, string, error) {

@@ -7,7 +7,7 @@ package hotkey_test
 import (
 	"fmt"
 
-	"github.com/zen099/onetube/server/base/hotkey"
+	"github.com/nece099/base/hotkey"
 )
 
 func ExampleRegister() {

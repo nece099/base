@@ -1,7 +1,7 @@
 package adapter
 
 import (
-	"github.com/zen099/onetube/server/base/logger"
+	"github.com/nece099/base/logger"
 )
 
 var Log *logger.Logger = nil

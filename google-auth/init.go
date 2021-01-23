@@ -1,6 +1,6 @@
 package auth
 
-import "github.com/zen099/onetube/server/base/logger"
+import "github.com/nece099/base/logger"
 
 var Log *logger.Logger = nil
 

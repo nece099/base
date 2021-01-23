@@ -3,7 +3,7 @@ package utils
 import (
 	"strings"
 
-	"github.com/zen099/onetube/server/base/datasource"
+	"github.com/nece099/base/datasource"
 )
 
 type ServerConfig struct {

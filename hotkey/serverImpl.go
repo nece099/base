@@ -12,7 +12,7 @@ import (
 
 	"github.com/lxn/win"
 
-	hotkey_win "github.com/zen099/onetube/server/base/hotkey/win"
+	hotkey_win "github.com/nece099/base/hotkey/win"
 )
 
 const (

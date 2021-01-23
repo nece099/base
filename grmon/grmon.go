@@ -3,7 +3,7 @@ package grmon
 import (
 	"sync"
 
-	"github.com/zen099/onetube/server/base/utils"
+	"github.com/nece099/base/utils"
 )
 
 type TGRMon struct {

@@ -5,7 +5,7 @@ import (
 	"encoding/hex"
 	"io"
 
-	"github.com/zen099/onetube/server/base/lzma/lzma"
+	"github.com/nece099/base/lzma/lzma"
 )
 
 func LZMADecode(mstr string) (string, error) {

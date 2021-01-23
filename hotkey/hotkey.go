@@ -5,7 +5,7 @@
 // Package hotkey provides HotKey for Go Language.
 package hotkey
 
-import hotkey_win "github.com/zen099/onetube/server/base/hotkey/win"
+import hotkey_win "github.com/nece099/base/hotkey/win"
 
 // A hotkey.Id is a identity number of registered hotkey.
 type Id int32
