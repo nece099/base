@@ -2,6 +2,8 @@ package dblogger
 
 import (
 	"context"
+	"fmt"
+	"strings"
 	"time"
 
 	glogger "gorm.io/gorm/logger"
@@ -35,10 +37,20 @@ func (l DbLogger) Trace(ctx context.Context, begin time.Time, fc func() (string,
 		elapsed := time.Since(begin)
 		sql, rows := fc()
 
+		prow := fmt.Sprintf("%v", rows)
+		if rows == -1 {
+			prow = "-"
+		}
+
+		// no print 标记不打印
+		if strings.Contains(sql, "/*no print*/") {
+			return
+		}
+
 		if err == nil {
-			Log.Debugf("[SQL] : %v\ntime : [%.3f]\nrows : [%v]\n", sql, float64(elapsed.Nanoseconds())/1e6, rows)
+			Log.Debugf("[SQL] : %v\ntime : [%.3f]\nrows : [%v]\n", sql, float64(elapsed.Nanoseconds())/1e6, prow)
 		} else {
-			Log.Debugf("[SQL] : %v\ntime : [%.3f]\nrows : [%v]\nerror:[%v],", sql, float64(elapsed.Nanoseconds())/1e6, rows, err)
+			Log.Debugf("[SQL] : %v\ntime : [%.3f]\nrows : [%v]\nerror:[%v],", sql, float64(elapsed.Nanoseconds())/1e6, prow, err)
 		}
 	}
 }
