@@ -1,4 +1,4 @@
-package gormlogger
+package dblogger
 
 import (
 	"github.com/maneki001/tgflow/server/base/logger"
