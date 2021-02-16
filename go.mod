@@ -11,7 +11,6 @@ require (
 	github.com/mgutz/ansi v0.0.0-20200706080929-d51e80ef957d
 	github.com/sirupsen/logrus v1.7.0
 	github.com/ttacon/libphonenumber v1.1.0
-	github.com/zen099/onetube/server v0.0.0-20201130024232-ea7b7163b2cb
 	golang.org/x/crypto v0.0.0-20201221181555-eec23a3978ad
 	gopkg.in/natefinch/lumberjack.v2 v2.0.0
 	gorm.io/driver/mysql v1.0.4
