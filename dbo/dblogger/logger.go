@@ -48,9 +48,9 @@ func (l DbLogger) Trace(ctx context.Context, begin time.Time, fc func() (string,
 		}
 
 		if err == nil {
-			Log.Debugf("[SQL111] : [%v]\ntime : [%.3f]\nrows : [%v]\n", sql, float64(elapsed.Nanoseconds())/1e6, prow)
+			Log.Debugf("<SQL> : [%v]\ntime : [%.3f]\nrows : [%v]\n", sql, float64(elapsed.Nanoseconds())/1e6, prow)
 		} else {
-			Log.Debugf("[SQL222] : [%v]\ntime : [%.3f]\nrows : [%v]\nerror:[%v],", sql, float64(elapsed.Nanoseconds())/1e6, prow, err)
+			Log.Debugf("<SQL> : [%v]\ntime : [%.3f]\nrows : [%v]\nerror:[%v],", sql, float64(elapsed.Nanoseconds())/1e6, prow, err)
 		}
 	}
 }
