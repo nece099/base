@@ -1,7 +1,7 @@
 package dblogger
 
 import (
-	"github.com/maneki001/tgflow/server/base/logger"
+	"github.com/nece099/base/logger"
 )
 
 var Log *logger.Logger = nil
