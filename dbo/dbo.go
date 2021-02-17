@@ -27,7 +27,7 @@ type Dbo struct {
 	models []interface{}
 }
 
-var dbo *Dbo = nil
+var dbo *Dbo = &Dbo{}
 
 func DboInit(configs []*DboConfig) {
 
@@ -41,15 +41,13 @@ func DboInit(configs []*DboConfig) {
 		logLv = glogger.Info
 	}
 
-	dbo = &Dbo{
-		config: &gorm.Config{
-			DisableForeignKeyConstraintWhenMigrating: true,
-			NamingStrategy: schema.NamingStrategy{
-				SingularTable: true, // use singular table name, table for `User` would be `user` with this option enabled
-			},
-			Logger: &dblogger.DbLogger{
-				LogLevel: logLv,
-			},
+	dbo.config = &gorm.Config{
+		DisableForeignKeyConstraintWhenMigrating: true,
+		NamingStrategy: schema.NamingStrategy{
+			SingularTable: true, // use singular table name, table for `User` would be `user` with this option enabled
+		},
+		Logger: &dblogger.DbLogger{
+			LogLevel: logLv,
 		},
 	}
 
