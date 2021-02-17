@@ -29,7 +29,12 @@ type Dbo struct {
 
 var dbo *Dbo = nil
 
-func DboInit(c *DboConfig) {
+func DboInit(configs []*DboConfig) {
+
+	if len(configs) == 0 {
+		panic("no db config found!")
+	}
+	c := configs[0]
 
 	logLv := glogger.Silent
 	if c.SqlDebug == 1 {
