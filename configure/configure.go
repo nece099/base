@@ -23,7 +23,7 @@ type ProgConfig struct {
 	ParamName  string `gorm:"size:64"`
 	ParamValue string `gorm:"type:longtext"`
 	Type       string `gorm:"size:32"`
-	Disabled   bool   `gorm:""`
+	Disabled   bool   `gorm:"default:0"`
 	Encrypted  bool   `gorm:""`
 	Comment    string `gorm:"size:1024"`
 }
