@@ -1,6 +1,6 @@
 package paging
 
-import "gorm.io/gorm"
+import "fmt"
 
 type Paging struct {
 	AllCount  int64
@@ -8,10 +8,21 @@ type Paging struct {
 	PageSize  int64
 }
 
-func GetPagingDB(db *gorm.DB, model interface{}, p *Paging) *gorm.DB {
-	if p != nil && p.PageSize > 0 {
-		return db.Model(model).Count(&p.AllCount).Offset(p.PageIndex * p.PageSize).Limit(p.PageSize)
-	}
+func (p *Paging) PageSql(sql string) string {
 
-	return db
+	newSql := `
+	select * from (` + sql + `) ps 
+	limit ` + fmt.Sprintf("%v", p.PageSize) + ` offset ` + fmt.Sprintf("%v", p.PageSize*p.PageIndex)
+
+	return newSql
+}
+
+func (p *Paging) CountSql(sql string) string {
+	countSql := `select count(*) as all_count from (` + sql + `) ps`
+	return countSql
+}
+
+var PAGE_FULL = &Paging{
+	PageIndex: 0,
+	PageSize:  999999999,
 }

@@ -3,7 +3,7 @@ package utils
 import (
 	"strings"
 
-	"github.com/nece099/base/datasource"
+	"github.com/nece099/base/dbo"
 )
 
 type ServerConfig struct {
@@ -11,7 +11,7 @@ type ServerConfig struct {
 	NodeID     string
 	LogLevel   string
 	ScreenLog  bool
-	DataSource []datasource.DataSource
+	DataSource []*dbo.DboConfig
 }
 
 var serverConfig = &ServerConfig{}
