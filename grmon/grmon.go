@@ -3,7 +3,7 @@ package grmon
 import (
 	"sync"
 
-	"github.com/nece099/base/utils"
+	"github.com/nece099/base/except"
 )
 
 type TGRMon struct {
@@ -30,7 +30,7 @@ func (s *TGRMon) Go(name string, fn interface{}, args ...interface{}) {
 
 	go func() {
 
-		defer utils.CatchPanic()
+		defer except.CatchPanic()
 
 		s.addGR(name)
 		defer s.removeGR(name)
@@ -49,7 +49,7 @@ func (s *TGRMon) GoLoop(name string, fn interface{}, args ...interface{}) {
 
 	go func() {
 
-		defer utils.CatchPanic()
+		defer except.CatchPanic()
 
 		s.addGR(name)
 		defer s.removeGR(name)
