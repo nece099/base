@@ -5,6 +5,8 @@ import (
 	"regexp"
 	"strconv"
 	"strings"
+
+	"github.com/nece099/base/except"
 )
 
 var matchFirstCap = regexp.MustCompile("(.)([A-Z][a-z]+)")
@@ -149,7 +151,7 @@ func JoinUint64List(s []uint64, sep string) string {
 
 func String2Float64(num string) float64 {
 	f, err := strconv.ParseFloat(num, 64)
-	ASSERT(err == nil)
+	except.ASSERT(err == nil)
 
 	return f
 }

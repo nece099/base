@@ -7,8 +7,6 @@ import (
 	"path/filepath"
 	"runtime/debug"
 	"time"
-
-	"github.com/nece099/base/utils"
 )
 
 func CatchPanic() {
@@ -28,7 +26,7 @@ func CatchException() {
 		fullPath, _ := exec.LookPath(os.Args[0])
 		fname := filepath.Base(fullPath)
 
-		datestr := utils.NowDateStr()
+		datestr := time.Now().Format("2006-01-02")
 		outstr := fmt.Sprintf("\n======\n[%v] err=%v, stack=%v\n======\n", time.Now(), err, string(debug.Stack()))
 		filename := "./log/panic_" + fname + datestr + ".log"
 		f, err2 := os.OpenFile(filename, os.O_RDWR|os.O_APPEND|os.O_CREATE, 0666)
