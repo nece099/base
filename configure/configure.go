@@ -8,8 +8,8 @@ import (
 
 	"github.com/nece099/base/crypto"
 	"github.com/nece099/base/dbo"
+	"github.com/nece099/base/except"
 	"github.com/nece099/base/grmon"
-	"github.com/nece099/base/utils"
 )
 
 type Model struct {
@@ -134,13 +134,13 @@ func reloadProgConfig() {
 }
 
 func ProgConfigureInstance() *ProgConfigure {
-	utils.ASSERT(progConfigure != nil)
+	except.ASSERT(progConfigure != nil)
 	return progConfigure
 }
 
 func (p *ProgConfigure) GetConfigItem(name string) *Item {
 	itemobj, ok := p.configMap.Load(name)
-	utils.ASSERT(ok)
+	except.ASSERT(ok)
 
 	return itemobj.(*Item)
 }
