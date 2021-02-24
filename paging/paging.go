@@ -1,6 +1,6 @@
 package paging
 
-import "github.com/jinzhu/gorm"
+import "gorm.io/gorm"
 
 type Paging struct {
 	AllCount  int64

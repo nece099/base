@@ -3,7 +3,7 @@ package utils
 import (
 	"github.com/nece099/base/datasource"
 
-	"github.com/jinzhu/gorm"
+	"gorm.io/gorm"
 )
 
 type TCrudService struct{}
