@@ -6,7 +6,6 @@ import (
 	"time"
 
 	"github.com/nece099/base/dbo/dblogger"
-	"github.com/nece099/base/utils"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	glogger "gorm.io/gorm/logger"
@@ -85,7 +84,7 @@ func RegisterModels(models ...interface{}) {
 }
 
 func DboInstance() *Dbo {
-	utils.ASSERT(dbo != nil)
+	ASSERT(dbo != nil)
 	return dbo
 }
 
