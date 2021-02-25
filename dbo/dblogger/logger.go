@@ -42,8 +42,8 @@ func (l DbLogger) Trace(ctx context.Context, begin time.Time, fc func() (string,
 			prow = "-"
 		}
 
-		// no print 标记不打印
-		if strings.Contains(sql, "/*no print*/") {
+		// 过滤部分sql
+		if l.sqlFilter(sql) {
 			return
 		}
 
@@ -53,4 +53,21 @@ func (l DbLogger) Trace(ctx context.Context, begin time.Time, fc func() (string,
 			Log.Debugf("<SQL> : [%v]\ntime : [%.3f]\nrows : [%v]\nerror : [%v],", sql, float64(elapsed.Nanoseconds())/1e6, prow, err)
 		}
 	}
+}
+
+func (l DbLogger) sqlFilter(sql string) bool {
+	// no print 标记不打印
+	if strings.Contains(sql, "/*no print*/") {
+		return true
+	}
+
+	if strings.Contains(sql, "information_schema") {
+		return true
+	}
+
+	if strings.Contains(sql, "[SELECT DATABASE()") {
+		return true
+	}
+
+	return false
 }
