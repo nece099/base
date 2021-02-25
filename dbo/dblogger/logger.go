@@ -65,7 +65,7 @@ func (l DbLogger) sqlFilter(sql string) bool {
 		return true
 	}
 
-	if strings.Contains(sql, "[SELECT DATABASE()") {
+	if strings.Contains(sql, "SELECT DATABASE()") {
 		return true
 	}
 
