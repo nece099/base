@@ -66,6 +66,8 @@ func DboInit(configs []*DboConfig) {
 	sdb.SetMaxOpenConns(c.MaxSize)
 	sdb.SetConnMaxLifetime(time.Duration(c.MaxLifeTime) * time.Second)
 
+	// 设置字符编码
+	db = db.Set("gorm:table_options", "ENGINE=InnoDB CHARSET=utf8mb4")
 	for _, m := range dbo.models {
 		if !db.Migrator().HasTable(m) {
 			err := db.Migrator().CreateTable(m)
