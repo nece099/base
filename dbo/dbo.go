@@ -76,7 +76,7 @@ func DboInit(configs []*DboConfig) {
 			}
 		}
 	}
-	db.AutoMigrate(dbo.models...)
+	// db.AutoMigrate(dbo.models...)
 
 	dbo.db = db
 }
