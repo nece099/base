@@ -23,6 +23,7 @@ type DboConfig struct {
 type Dbo struct {
 	config *gorm.Config
 	db     *gorm.DB
+	casbin *gorm.DB
 	models []interface{}
 }
 
@@ -79,6 +80,38 @@ func DboInit(configs []*DboConfig) {
 	db.AutoMigrate(dbo.models...)
 
 	dbo.db = db
+}
+
+func openCasbin(cfg *DboConfig) (*gorm.DB, error) {
+
+	config := &gorm.Config{
+		DisableForeignKeyConstraintWhenMigrating: true,
+		NamingStrategy: schema.NamingStrategy{
+			SingularTable: true, // use singular table name, table for `User` would be `user` with this option enabled
+		},
+		Logger: &dblogger.DbLogger{
+			LogLevel: glogger.Silent,
+		},
+	}
+
+	db, err := gorm.Open(mysql.Open(cfg.URL), config)
+	if err != nil {
+		Log.Error(err)
+		os.Exit(-1)
+	}
+
+	sdb, err := db.DB()
+	if err != nil {
+		Log.Error(err)
+		os.Exit(-1)
+	}
+
+	sdb.SetMaxIdleConns(c.IdleSize)
+	sdb.SetMaxOpenConns(c.MaxSize)
+	sdb.SetConnMaxLifetime(time.Duration(c.MaxLifeTime) * time.Second)
+
+	// 设置字符编码
+	db = db.Set("gorm:table_options", "ENGINE=InnoDB CHARSET=utf8mb4")
 }
 
 func RegisterModels(models ...interface{}) {
