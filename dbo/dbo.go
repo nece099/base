@@ -80,9 +80,10 @@ func DboInit(configs []*DboConfig) {
 	db.AutoMigrate(dbo.models...)
 
 	dbo.db = db
+	dbo.casbin = openCasbin(c)
 }
 
-func openCasbin(cfg *DboConfig) (*gorm.DB, error) {
+func openCasbin(c *DboConfig) *gorm.DB {
 
 	config := &gorm.Config{
 		DisableForeignKeyConstraintWhenMigrating: true,
@@ -94,7 +95,7 @@ func openCasbin(cfg *DboConfig) (*gorm.DB, error) {
 		},
 	}
 
-	db, err := gorm.Open(mysql.Open(cfg.URL), config)
+	db, err := gorm.Open(mysql.Open(c.URL), config)
 	if err != nil {
 		Log.Error(err)
 		os.Exit(-1)
@@ -110,8 +111,7 @@ func openCasbin(cfg *DboConfig) (*gorm.DB, error) {
 	sdb.SetMaxOpenConns(c.MaxSize)
 	sdb.SetConnMaxLifetime(time.Duration(c.MaxLifeTime) * time.Second)
 
-	// 设置字符编码
-	db = db.Set("gorm:table_options", "ENGINE=InnoDB CHARSET=utf8mb4")
+	return db
 }
 
 func RegisterModels(models ...interface{}) {
@@ -125,4 +125,8 @@ func DboInstance() *Dbo {
 
 func (s *Dbo) DB() *gorm.DB {
 	return dbo.db
+}
+
+func (s *Dbo) CasbinDB() *gorm.DB {
+	return dbo.casbin
 }
