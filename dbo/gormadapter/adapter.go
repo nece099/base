@@ -295,12 +295,15 @@ func (a *Adapter) casbinRuleTable() func(db *gorm.DB) *gorm.DB {
 }
 
 func (a *Adapter) createTable() error {
-	t := a.db.Statement.Context.Value(customTableKey{})
-	if t == nil {
-		return a.db.AutoMigrate(a.getTableInstance())
-	}
+	// unknow bug here, just a work around
+	return nil
 
-	return a.db.AutoMigrate(t)
+	// t := a.db.Statement.Context.Value(customTableKey{})
+	// if t == nil {
+	// 	return a.db.AutoMigrate(a.getTableInstance())
+	// }
+
+	// return a.db.AutoMigrate(t)
 }
 
 func (a *Adapter) dropTable() error {
