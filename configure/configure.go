@@ -177,7 +177,7 @@ func (p *ProgConfigure) SetConfigItem(name string, value string) error {
 	}
 
 	db := dbo.DboInstance().DB()
-	err := db.Save(config).Error
+	err := db.Model(&ProgConfig{}).Save(config).Error
 	if err != nil {
 		Log.Errorf("db error = %v", err)
 		return err
