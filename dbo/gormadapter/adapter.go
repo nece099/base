@@ -190,6 +190,15 @@ func NewFilteredAdapter(driverName string, dataSourceName string, params ...inte
 
 // NewAdapterByDB creates gorm-adapter by an existing Gorm instance
 func NewAdapterByDB(db *gorm.DB) (*Adapter, error) {
+	// creat table first
+	cr := new(CasbinRule)
+	if !db.Migrator().HasTable(cr) {
+		err := db.Migrator().CreateTable(cr)
+		if err != nil {
+			return nil, err
+		}
+	}
+
 	return NewAdapterByDBUseTableName(db, "", defaultTableName)
 }
 
