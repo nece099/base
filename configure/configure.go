@@ -113,7 +113,7 @@ func loadProgConfig() {
 	db := dbo.DboInstance().DB()
 	err := db.Raw("/*no print*/ select * from prog_config").Find(&configs).Error
 	if err != nil {
-		Log.Errorf("load prog config failed, err = %v", err)
+		Log.Warnf("load prog config failed, err = %v", err)
 		return
 	}
 
