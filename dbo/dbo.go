@@ -91,5 +91,7 @@ func DboInstance() *Dbo {
 }
 
 func (s *Dbo) DB() *gorm.DB {
-	return dbo.db
+	db := s.db
+	sessdb := db.Session(&gorm.Session{})
+	return sessdb
 }
