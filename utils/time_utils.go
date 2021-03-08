@@ -1,6 +1,7 @@
 package utils
 
 import (
+	"fmt"
 	"time"
 )
 
@@ -18,4 +19,9 @@ func (d *Duration) UnmarshalText(text []byte) error {
 /////////////////////////////////////////////////////////////
 func NowFormatYMDHMS() string {
 	return time.Now().Format("2006-01-02 15:04:05")
+}
+
+func DateStr(t time.Time) string {
+	ds := fmt.Sprintf("%04d-%02d-%02d", t.Year(), t.Month(), t.Day())
+	return ds
 }
