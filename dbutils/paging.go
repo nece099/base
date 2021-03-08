@@ -1,4 +1,4 @@
-package paging
+package dbutils
 
 import "fmt"
 
