@@ -71,8 +71,8 @@ func readLogConfig() *TLogConfig {
 	filepath := "./config/log.json"
 	content, err := ioutil.ReadFile(filepath)
 	if err != nil {
-		fmt.Printf("read log config failed, err = %v\n", err)
-		fmt.Printf("will use default log config\n")
+		// fmt.Printf("read log config failed, err = %v\n", err)
+		// fmt.Printf("will use default log config\n")
 		return &TLogConfig{
 			MaxSize:    1024,
 			MaxBackups: 10,
@@ -95,6 +95,8 @@ func readLogConfig() *TLogConfig {
 			Level:      "DEBUG",
 		}
 	}
+
+	fmt.Printf("loaded log config, config = %#v\n", config)
 
 	return config
 }
