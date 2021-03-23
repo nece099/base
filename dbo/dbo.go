@@ -18,6 +18,7 @@ type DboConfig struct {
 	MaxSize     int
 	MaxLifeTime int64
 	SqlDebug    int
+	AutoMigrate bool
 }
 
 type Dbo struct {
@@ -76,7 +77,10 @@ func DboInit(configs []*DboConfig) {
 			}
 		}
 	}
-	// db.AutoMigrate(dbo.models...)
+
+	if c.AutoMigrate {
+		db.AutoMigrate(dbo.models...)
+	}
 
 	dbo.db = db
 }
