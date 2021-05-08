@@ -125,4 +125,13 @@ func (dao *{{.StructName}}Dao) BatchUpdaterAttrs(idbatch []int64, attrs map[stri
 	return dao.DB().Model(&do.{{.StructName}}{}).Where("id in (?)", idbatch).Updates(attrs).Error
 }
 
+func (dao *{{.StructName}}Dao) Found(m *do.{{.StructName}}) bool {
+	err := dao.db.First(m, m).Error
+	if err != nil {
+		return false
+	} else {
+		return true
+	}
+}
+
 `
