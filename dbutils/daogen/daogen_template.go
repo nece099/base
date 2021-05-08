@@ -103,6 +103,13 @@ func (dao *{{.StructName}}Dao) Save(m *do.{{.StructName}}) error {
 	return dao.DB().Save(m).Error
 }
 
+func (dao *{{.StructName}}Dao) Delete(m *do.{{.StructName}}) error {
+	if m.GetID() <= 0 {
+		return errors.New("id is nil")
+	}
+	return dao.db.Delete(m).Error
+}
+
 func (dao *{{.StructName}}Dao) BatchDelete(idbatch []int64) error {
 	if len(idbatch) == 0 {
 		return errors.New("id is nil")
