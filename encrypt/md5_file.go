@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2017, https://github.com/nebulaim
+ *  Copyright (c) 2018, https://github.com/nebulaim
  *  All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,33 +15,34 @@
  * limitations under the License.
  */
 
-package crypto
+package encrypt
 
 import (
-	"crypto/rand"
-	"crypto/sha1"
-	"crypto/sha256"
-	"encoding/hex"
+	"crypto/md5"
+	"fmt"
+	"io"
+	"os"
+
+	. "github.com/nece099/base/logger"
 )
 
-func Sha256Digest(data []byte) []byte {
-	r := sha256.Sum256(data)
-	return r[:]
-}
+// TODO(@benqi): remove to baselib
+func CalcMd5File(filename string) (string, error) {
+	// fileName := core.NBFS_DATA_PATH + m.data.FilePath
+	f, err := os.Open(filename)
+	if err != nil {
+		Log.Error(err)
+		return "", err
+	}
 
-func Sha1Digest(data []byte) []byte {
-	r := sha1.Sum(data)
-	return r[:]
-}
+	defer f.Close()
 
-func GenerateNonce(size int) []byte {
-	b := make([]byte, size)
-	_, _ = rand.Read(b)
-	return b
-}
+	md5Hash := md5.New()
+	if _, err := io.Copy(md5Hash, f); err != nil {
+		// fmt.Println("Copy", err)
+		Log.Error("Copy - ", err)
+		return "", err
+	}
 
-func GenerateStringNonce(size int) string {
-	b := make([]byte, size)
-	_, _ = rand.Read(b)
-	return hex.EncodeToString(b)
+	return fmt.Sprintf("%x", md5Hash.Sum(nil)), nil
 }

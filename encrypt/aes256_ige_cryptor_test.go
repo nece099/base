@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package crypto
+package encrypt
 
 import (
 	"encoding/hex"
