@@ -126,7 +126,7 @@ func (dao *{{.StructName}}Dao) BatchUpdaterAttrs(idbatch []int64, attrs map[stri
 }
 
 func (dao *{{.StructName}}Dao) Found(m *do.{{.StructName}}) bool {
-	err := dao.db.First(m, m).Error
+	err := dao.DB().First(m, m).Error
 	if err != nil {
 		return false
 	} else {
