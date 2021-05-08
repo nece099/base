@@ -107,7 +107,7 @@ func (dao *{{.StructName}}Dao) Delete(m *do.{{.StructName}}) error {
 	if m.GetID() <= 0 {
 		return errors.New("id is nil")
 	}
-	return dao.db.Delete(m).Error
+	return dao.DB().Delete(m).Error
 }
 
 func (dao *{{.StructName}}Dao) BatchDelete(idbatch []int64) error {
