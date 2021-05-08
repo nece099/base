@@ -6,13 +6,13 @@ import (
 	"net/http"
 	"path"
 
-	"github.com/nece099/base/crypto"
+	"github.com/nece099/base/encrypt"
 )
 
 func DownloadFile(url string) ([]byte, string, error) {
 
 	ext := path.Ext(url)
-	filename := fmt.Sprintf("%v%v", crypto.MD5(url), ext)
+	filename := fmt.Sprintf("%v%v", encrypt.MD5(url), ext)
 
 	resp, err := http.Get(url)
 	if err != nil {

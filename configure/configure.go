@@ -6,8 +6,8 @@ import (
 
 	"time"
 
-	"github.com/nece099/base/crypto"
 	"github.com/nece099/base/dbo"
+	"github.com/nece099/base/encrypt"
 	"github.com/nece099/base/except"
 	"github.com/nece099/base/grmon"
 )
@@ -63,7 +63,7 @@ func (item *Item) Float64() float64 {
 
 func (item *Item) Decrypt() string {
 
-	d, err := crypto.InternalDecryptStr(item.String())
+	d, err := encrypt.InternalDecryptStr(item.String())
 	if err != nil {
 		Log.Errorf("decrypt failed, err = %v", err)
 		return ""
@@ -160,7 +160,7 @@ func (p *ProgConfigure) GetConfigItemFromDb(name string) *Item {
 
 func (p *ProgConfigure) SetConfigItemWithEncryption(name string, value string) error {
 
-	encrypted, err := crypto.InternalEncryptStr(value)
+	encrypted, err := encrypt.InternalEncryptStr(value)
 	if err != nil {
 		Log.Errorf("value=%v, err=%v", value, err)
 		return err
