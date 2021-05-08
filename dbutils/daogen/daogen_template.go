@@ -91,6 +91,13 @@ func (dao *{{.StructName}}Dao) FindPage(m *do.{{.StructName}}, p *dbutils.Paging
 	return
 }
 
+func (dao *{{.StructName}}Dao) Get(m *do.{{.StructName}}) error {
+	if m.GetID() == 0 {
+		return errors.New("id is nil")
+	}
+	return dao.DB().Find(m).Error
+}
+
 func (dao *{{.StructName}}Dao) BatchGet(idbatch []int64) (result []*do.{{.StructName}}, err error) {
 	if len(idbatch) == 0 {
 		return nil, errors.New("id is nil")
