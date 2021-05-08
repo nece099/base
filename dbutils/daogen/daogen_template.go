@@ -104,7 +104,7 @@ func (dao *{{.StructName}}Dao) Save(m *do.{{.StructName}}) error {
 }
 
 func (dao *{{.StructName}}Dao) Delete(m *do.{{.StructName}}) error {
-	if m.GetID() <= 0 {
+	if m.GetID() == 0 {
 		return errors.New("id is nil")
 	}
 	return dao.DB().Delete(m).Error
