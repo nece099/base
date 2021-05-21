@@ -91,7 +91,12 @@ func ProgConfigureInit(defaultConfig map[string]string) {
 	loadProgConfig()
 
 	grm := grmon.GetGRMon()
-	grm.GoLoop("reloadProgConfig_loop", reloadProgConfig)
+	grm.Go("reloadProgConfig", func() {
+		for {
+			time.Sleep(time.Duration(60) * time.Second)
+			loadProgConfig()
+		}
+	})
 }
 
 func setConfig(configmap map[string]string) {
@@ -126,11 +131,6 @@ func loadProgConfig() {
 		}
 		progConfigure.configMap.Store(c.ParamName, item)
 	}
-}
-
-func reloadProgConfig() {
-	time.Sleep(time.Duration(60) * time.Second)
-	loadProgConfig()
 }
 
 func ProgConfigureInstance() *ProgConfigure {
