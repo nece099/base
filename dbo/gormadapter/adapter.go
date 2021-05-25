@@ -337,7 +337,7 @@ func loadPolicyLine(line CasbinRule, model model.Model) {
 // LoadPolicy loads policy from database.
 func (a *Adapter) LoadPolicy(model model.Model) error {
 	var lines []CasbinRule
-	if err := a.db.Order("ID").Find(&lines).Error; err != nil {
+	if err := a.db.Where("/*no print*/ 1=1").Order("ID").Find(&lines).Error; err != nil {
 		return err
 	}
 
