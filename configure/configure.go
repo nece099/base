@@ -19,7 +19,7 @@ type Configure struct {
 	ParamValue string `gorm:"type:longtext"`
 	Disabled   bool   `gorm:"default:0"`
 	Encrypted  bool   `gorm:"default:0"`
-	Remark     string `gorm:"size:1024"`
+	Remark     string `gorm:"type:longtext"`
 }
 
 type Item struct {
