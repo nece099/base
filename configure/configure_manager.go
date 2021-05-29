@@ -26,7 +26,7 @@ func ConfigureManagerInit(externalConfigure map[string]string) {
 	loadConfigures()
 
 	grm := grmon.GetGRMon()
-	grm.Go("reloadProgConfig", func() {
+	grm.Go("reloadConfigures", func() {
 		for {
 			time.Sleep(time.Duration(60) * time.Second)
 			loadConfigures()
