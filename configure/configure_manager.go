@@ -124,6 +124,18 @@ func (p *ConfigureManager) SetConfigItem(name string, value string) error {
 	return nil
 }
 
+func (p *ConfigureManager) ConfigureList() []*Configure {
+	cfgs := []*Configure{}
+	db := dbo.DboInstance().DB()
+	err := db.Model(&Configure{}).Order("id").Find(&cfgs).Error
+	if err != nil {
+		Log.Error("db error = %v", err)
+		panic(err)
+	}
+
+	return cfgs
+}
+
 func GetItem(name string) *Item {
 	return ConfigureManagerInstance().GetConfigItem(name)
 }
@@ -134,4 +146,8 @@ func SetItem(name string, value string) error {
 
 func GetItemDirect(name string) *Item {
 	return ConfigureManagerInstance().GetConfigItemFromDB(name)
+}
+
+func ConfigureList() []*Configure {
+	return ConfigureManagerInstance().ConfigureList()
 }
