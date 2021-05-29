@@ -78,7 +78,7 @@ func (p *ConfigureManager) GetConfigItem(name string) *Item {
 	return itemobj.(*Item)
 }
 
-func (p *ConfigureManager) GetConfigItemFromDb(name string) *Item {
+func (p *ConfigureManager) GetConfigItemFromDB(name string) *Item {
 	config := Configure{}
 	db := dbo.DboInstance().DB()
 	err := db.Where("param_name=?", name).Find(&config).Error
@@ -90,26 +90,30 @@ func (p *ConfigureManager) GetConfigItemFromDb(name string) *Item {
 	return &Item{Value: config.ParamValue, Disabled: config.Disabled}
 }
 
-func (p *ConfigureManager) SetConfigItemWithEncryption(name string, value string) error {
-
-	encrypted, err := encrypt.InternalEncryptStr(value)
-	if err != nil {
-		Log.Errorf("value=%v, err=%v", value, err)
-		return err
-	}
-
-	return p.SetConfigItem(name, encrypted)
-}
-
 func (p *ConfigureManager) SetConfigItem(name string, value string) error {
 
 	config := &Configure{
-		ParamName:  name,
-		ParamValue: value,
+		ParamName: name,
 	}
 
 	db := dbo.DboInstance().DB()
-	err := db.Where("param_name=?", name).Update("param_value", value).Error
+	err := db.Model(&Configure{}).First(config).Error
+	if err != nil {
+		Log.Error(err)
+		return err
+	}
+
+	if config.Encrypted {
+		val, err := encrypt.InternalEncryptStr(value)
+		if err != nil {
+			Log.Error(err)
+			return err
+		}
+
+		config.ParamValue = val
+	}
+
+	err = db.Where("param_name=?", name).Update("param_value", config.ParamValue).Error
 	if err != nil {
 		Log.Errorf("db error = %v", err)
 		return err
@@ -129,9 +133,5 @@ func SetItem(name string, value string) error {
 }
 
 func GetItemDirect(name string) *Item {
-	return ConfigureManagerInstance().GetConfigItemFromDb(name)
-}
-
-func SetItemWithEncryption(name string, value string) error {
-	return ConfigureManagerInstance().SetConfigItemWithEncryption(name, value)
+	return ConfigureManagerInstance().GetConfigItemFromDB(name)
 }
