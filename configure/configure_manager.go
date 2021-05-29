@@ -111,6 +111,8 @@ func (p *ConfigureManager) SetConfigItem(name string, value string) error {
 		}
 
 		config.ParamValue = val
+	} else {
+		config.ParamValue = value
 	}
 
 	err = db.Model(&Configure{}).
