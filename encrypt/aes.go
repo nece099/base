@@ -127,7 +127,7 @@ func PKCS7UnPadding(origData []byte) []byte {
 }
 
 const (
-	InternalCryptKey = "Internaloooo6666JjKkIiBbAaXxCcVv"
+	InternalCryptKey = "internaloooo6666JjKkIiBbAaXxCcVX"
 )
 
 func InternalEncryptStr(origDataStr string) (string, error) {
