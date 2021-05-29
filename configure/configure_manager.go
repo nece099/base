@@ -36,12 +36,12 @@ func ConfigureManagerInit(externalConfigure map[string]string) {
 
 func setConfigures(configMap map[string]string) {
 	for k, v := range configMap {
-		item := &Item{
-			Value:    v,
-			Disabled: false,
+		c := &Configure{
+			ParamValue: v,
+			Disabled:   false,
 		}
 
-		configureManager.cache.Store(k, item)
+		configureManager.cache.Store(k, c)
 	}
 }
 
@@ -56,13 +56,7 @@ func loadConfigures() {
 	}
 
 	for _, c := range cs {
-
-		item := &Item{
-			Value:     c.ParamValue,
-			Disabled:  c.Disabled,
-			Encrypted: c.Encrypted,
-		}
-		configureManager.cache.Store(c.ParamName, item)
+		configureManager.cache.Store(c.ParamName, c)
 	}
 }
 
@@ -71,23 +65,23 @@ func ConfigureManagerInstance() *ConfigureManager {
 	return configureManager
 }
 
-func (p *ConfigureManager) GetConfigItem(name string) *Item {
+func (p *ConfigureManager) GetConfigItem(name string) *Configure {
 	itemobj, ok := p.cache.Load(name)
 	except.ASSERT(ok)
 
-	return itemobj.(*Item)
+	return itemobj.(*Configure)
 }
 
-func (p *ConfigureManager) GetConfigItemFromDB(name string) *Item {
-	config := Configure{}
+func (p *ConfigureManager) GetConfigItemFromDB(name string) *Configure {
+	config := &Configure{}
 	db := dbo.DboInstance().DB()
-	err := db.Model(&Configure{}).Where("param_name=?", name).First(&config).Error
+	err := db.Model(&Configure{}).Where("param_name=?", name).First(config).Error
 	if err != nil {
 		Log.Error("db error = %v", err)
 		panic(err)
 	}
 
-	return &Item{Value: config.ParamValue, Disabled: config.Disabled}
+	return config
 }
 
 func (p *ConfigureManager) SetConfigItem(name string, value string) error {
@@ -140,7 +134,7 @@ func (p *ConfigureManager) ConfigureList() []*Configure {
 	return cfgs
 }
 
-func GetItem(name string) *Item {
+func GetItem(name string) *Configure {
 	return ConfigureManagerInstance().GetConfigItem(name)
 }
 
@@ -148,7 +142,7 @@ func SetItem(name string, value string) error {
 	return ConfigureManagerInstance().SetConfigItem(name, value)
 }
 
-func GetItemDirect(name string) *Item {
+func GetItemDirect(name string) *Configure {
 	return ConfigureManagerInstance().GetConfigItemFromDB(name)
 }
 

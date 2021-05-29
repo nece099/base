@@ -22,19 +22,13 @@ type Configure struct {
 	Remark     string `gorm:"type:longtext"`
 }
 
-type Item struct {
-	Value     interface{}
-	Disabled  bool
-	Encrypted bool
+func (c *Configure) String() string {
+	return c.ParamValue
 }
 
-func (item *Item) String() string {
-	return item.Value.(string)
-}
+func (c *Configure) Int64() int64 {
 
-func (item *Item) Int64() int64 {
-
-	sval := item.Value.(string)
+	sval := c.ParamValue
 	i, err := strconv.ParseInt(sval, 10, 64)
 	if err != nil {
 		panic(err)
@@ -43,10 +37,9 @@ func (item *Item) Int64() int64 {
 	return i
 }
 
-func (item *Item) Float64() float64 {
+func (c *Configure) Float64() float64 {
 
-	sval := item.Value.(string)
-
+	sval := c.ParamValue
 	f, err := strconv.ParseFloat(sval, 64)
 	if err != nil {
 		panic(err)
@@ -55,9 +48,9 @@ func (item *Item) Float64() float64 {
 	return f
 }
 
-func (item *Item) Decrypt() string {
+func (c *Configure) Decrypt() string {
 
-	d, err := encrypt.InternalDecryptStr(item.String())
+	d, err := encrypt.InternalDecryptStr(c.String())
 	if err != nil {
 		Log.Errorf("decrypt failed, err = %v", err)
 		return ""
@@ -66,6 +59,6 @@ func (item *Item) Decrypt() string {
 	return d
 }
 
-func (item *Item) IsDisabled() bool {
-	return item.Disabled
+func (c *Configure) IsDisabled() bool {
+	return c.Disabled
 }
