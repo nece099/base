@@ -81,7 +81,7 @@ func (p *ConfigureManager) GetConfigItem(name string) *Item {
 func (p *ConfigureManager) GetConfigItemFromDB(name string) *Item {
 	config := Configure{}
 	db := dbo.DboInstance().DB()
-	err := db.Where("param_name=?", name).Find(&config).Error
+	err := db.Model(&Configure{}).Where("param_name=?", name).First(&config).Error
 	if err != nil {
 		Log.Error("db error = %v", err)
 		panic(err)
@@ -113,7 +113,9 @@ func (p *ConfigureManager) SetConfigItem(name string, value string) error {
 		config.ParamValue = val
 	}
 
-	err = db.Where("param_name=?", name).Update("param_value", config.ParamValue).Error
+	err = db.Model(&Configure{}).
+		Where("param_name=?", name).
+		Update("param_value", config.ParamValue).Error
 	if err != nil {
 		Log.Errorf("db error = %v", err)
 		return err
