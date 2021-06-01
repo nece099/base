@@ -46,6 +46,8 @@ func openDb(c *DboConfig) (*gorm.DB, error) {
 
 	if dbtype == DB_TYPE_MYSQL {
 		db, err := gorm.Open(mysql.Open(c.URL), dbo.config)
+		// 设置字符编码
+		db = db.Set("gorm:table_options", "ENGINE=InnoDB CHARSET=utf8mb4")
 		return db, err
 	} else if dbtype == DB_TYPE_SQLITE {
 		db, err := gorm.Open(sqlite.Open(c.URL), dbo.config)
@@ -93,8 +95,6 @@ func DboInit(configs []*DboConfig) {
 	sdb.SetMaxOpenConns(c.MaxSize)
 	sdb.SetConnMaxLifetime(time.Duration(c.MaxLifeTime) * time.Second)
 
-	// 设置字符编码
-	db = db.Set("gorm:table_options", "ENGINE=InnoDB CHARSET=utf8mb4")
 	for _, m := range dbo.models {
 		if !db.Migrator().HasTable(m) {
 			err := db.Migrator().CreateTable(m)
