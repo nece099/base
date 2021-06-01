@@ -38,7 +38,7 @@ type Dbo struct {
 
 var dbo *Dbo = &Dbo{}
 
-func OpenDb(c *DboConfig) (*gorm.DB, error) {
+func openDb(c *DboConfig) (*gorm.DB, error) {
 	dbtype := c.DbType
 	if len(dbtype) == 0 {
 		dbtype = DB_TYPE_MYSQL
@@ -77,7 +77,7 @@ func DboInit(configs []*DboConfig) {
 		},
 	}
 
-	db, err := gorm.Open(mysql.Open(c.URL), dbo.config)
+	db, err := openDb(c)
 	if err != nil {
 		Log.Error(err)
 		os.Exit(-1)
