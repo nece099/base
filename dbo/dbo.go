@@ -1,18 +1,27 @@
 package dbo
 
 import (
+	"errors"
+	"fmt"
 	"os"
 	"reflect"
 	"time"
 
 	"github.com/nece099/base/dbo/dblogger"
 	"gorm.io/driver/mysql"
+	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 	glogger "gorm.io/gorm/logger"
 	"gorm.io/gorm/schema"
 )
 
+const (
+	DB_TYPE_MYSQL  = "mysql"
+	DB_TYPE_SQLITE = "sqlite"
+)
+
 type DboConfig struct {
+	DbType      string
 	URL         string
 	IdleSize    int
 	MaxSize     int
@@ -28,6 +37,23 @@ type Dbo struct {
 }
 
 var dbo *Dbo = &Dbo{}
+
+func OpenDb(c *DboConfig) (*gorm.DB, error) {
+	dbtype := c.DbType
+	if len(dbtype) == 0 {
+		dbtype = DB_TYPE_MYSQL
+	}
+
+	if dbtype == DB_TYPE_MYSQL {
+		db, err := gorm.Open(mysql.Open(c.URL), dbo.config)
+		return db, err
+	} else if dbtype == DB_TYPE_SQLITE {
+		db, err := gorm.Open(sqlite.Open(c.URL), dbo.config)
+		return db, err
+	} else {
+		return nil, errors.New(fmt.Sprintf("unsupported db type:%v", dbtype))
+	}
+}
 
 func DboInit(configs []*DboConfig) {
 
