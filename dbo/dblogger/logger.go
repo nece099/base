@@ -69,5 +69,9 @@ func (l DbLogger) sqlFilter(sql string) bool {
 		return true
 	}
 
+	if strings.Contains(sql, "sqlite_master") {
+		return true
+	}
+
 	return false
 }
