@@ -32,12 +32,17 @@ func Get{{.StructName}}Dao() *{{.StructName}}Dao {
 	return {{LowerCaseFirstLetter .StructName}}Dao
 }
 
-func (dao *{{.StructName}}Dao) Lock() {
-	dao.mutex.Lock()
-}
+func (dao *{{.StructName}}Dao) LockRow(tx *gorm.DB, id int64) (*do.{{.StructName}}, error) {
+	row := &do.{{.StructName}}
+	err := tx.Model(&do.{{.StructName}}).
+		Clauses(clause.Locking{Strength: "UPDATE"}).
+		Where("id=?", id).
+		First(row).Error
+	if err != nil {
+		return nil, err
+	}
 
-func (dao *{{.StructName}}Dao) Unlock() {
-	dao.mutex.Unlock()
+	return row, nil
 }
 
 func (dao *{{.StructName}}Dao)DB() *gorm.DB {
@@ -74,15 +79,7 @@ func (dao *{{.StructName}}Dao) FindPage(m *do.{{.StructName}}, p *dbutils.Paging
 			return
 		}
 	} else {
-
-		err = db.Count(&p.AllCount).Error
-		if err != nil {
-			return
-		}
-
-		err = db.Limit(int(p.PageSize)).
-			Offset(int(p.PageIndex * p.PageSize)).
-			Find(&result).Error
+		err = FindPage(db, &result, p)
 		if err != nil {
 			return
 		}
