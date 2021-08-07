@@ -12,17 +12,16 @@ import (
 	"github.com/nece099/base/dbo"
 	"%v/do"
 	"github.com/nece099/base/dbutils"
+	"gorm.io/gorm/clause"
 )
 
 type {{.StructName}}Dao struct {
-	mutex *sync.Mutex
 }
 
 var {{LowerCaseFirstLetter .StructName}}Dao *{{.StructName}}Dao = nil
 
 func New{{.StructName}}Dao() *{{.StructName}}Dao {
 	{{LowerCaseFirstLetter .StructName}}Dao = &{{.StructName}}Dao{
-		mutex: &sync.Mutex{},
 	}
 	return {{LowerCaseFirstLetter .StructName}}Dao
 }
@@ -33,8 +32,8 @@ func Get{{.StructName}}Dao() *{{.StructName}}Dao {
 }
 
 func (dao *{{.StructName}}Dao) LockRow(tx *gorm.DB, id int64) (*do.{{.StructName}}, error) {
-	row := &do.{{.StructName}}
-	err := tx.Model(&do.{{.StructName}}).
+	row := &do.{{.StructName}}{}
+	err := tx.Model(&do.{{.StructName}}{}).
 		Clauses(clause.Locking{Strength: "UPDATE"}).
 		Where("id=?", id).
 		First(row).Error
