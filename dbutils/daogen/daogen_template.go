@@ -5,7 +5,6 @@ package dao
 
 import (
 	"errors"
-	"sync"
 
 	"gorm.io/gorm"
 	"github.com/nece099/base/except"
