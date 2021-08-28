@@ -17,9 +17,10 @@ type Configure struct {
 	Model
 	ParamName  string `gorm:"size:64"`
 	ParamValue string `gorm:"type:longtext"`
-	Disabled   bool   `gorm:"default:0"`
 	Encrypted  bool   `gorm:"default:0"`
 	Remark     string `gorm:"type:longtext"`
+	Hidden     bool   `gorm:"default:0"`
+	Disabled   bool   `gorm:"default:0"`
 }
 
 func (c *Configure) String() string {

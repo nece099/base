@@ -125,7 +125,10 @@ func (p *ConfigureManager) SetConfigItem(name string, value string) error {
 func (p *ConfigureManager) ConfigureList() []*Configure {
 	cfgs := []*Configure{}
 	db := dbo.DboInstance().DB()
-	err := db.Model(&Configure{}).Order("id").Find(&cfgs).Error
+	err := db.Model(&Configure{}).
+		Where("hidden=0").
+		Order("id").
+		Find(&cfgs).Error
 	if err != nil {
 		Log.Error("db error = %v", err)
 		panic(err)
