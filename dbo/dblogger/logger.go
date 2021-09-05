@@ -9,6 +9,10 @@ import (
 	glogger "gorm.io/gorm/logger"
 )
 
+const (
+	SQL_PRINT_MAX_LEN = 4096 * 10
+)
+
 type DbLogger struct {
 	LogLevel glogger.LogLevel
 }
@@ -47,6 +51,11 @@ func (l DbLogger) Trace(ctx context.Context, begin time.Time, fc func() (string,
 			return
 		}
 
+		// sql 过长会截断 40k 长度一般sql足够
+		if len(sql) > SQL_PRINT_MAX_LEN {
+			sql = sql[:SQL_PRINT_MAX_LEN] + "...[truncated]"
+		}
+
 		if err == nil {
 			Log.Debugf("<SQL> : [%v]\ntime : [%.3f]\nrows : [%v]\n", sql, float64(elapsed.Nanoseconds())/1e6, prow)
 		} else {
@@ -74,4 +83,22 @@ func (l DbLogger) sqlFilter(sql string) bool {
 	}
 
 	return false
+}
+
+// 可以用于临时不打印日志
+type NoLogger struct {
+	LogLevel glogger.LogLevel
+}
+
+func (l *NoLogger) LogMode(glogger.LogLevel) glogger.Interface {
+	return l
+}
+
+func (l NoLogger) Info(ctx context.Context, format string, args ...interface{}) {
+}
+func (l NoLogger) Warn(ctx context.Context, format string, args ...interface{}) {
+}
+func (l NoLogger) Error(ctx context.Context, format string, args ...interface{}) {
+}
+func (l NoLogger) Trace(ctx context.Context, begin time.Time, fc func() (string, int64), err error) {
 }
