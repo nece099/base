@@ -91,11 +91,18 @@ func DaoGenEntry() {
 		InitLines:   modelLine2,
 	}
 	writeModel(modelPath, modelPackge, mf)
+
+	// write dao
+	writDao(output)
 }
 
 func writeModel(modelPath string, modelPackge string, mf *ModelFill) {
 	modelgo := fmt.Sprintf(model_template, modelPackge, mf.StructLines, mf.InitLines)
 	ioutil.WriteFile(modelPath, []byte(modelgo), 0666)
+}
+
+func writDao(output string) {
+	ioutil.WriteFile(output, []byte(daogo_template), 0666)
 }
 
 type StructInfo struct {
