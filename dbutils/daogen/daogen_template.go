@@ -48,25 +48,25 @@ func (dao *{{.StructName}}Dao)DB() *gorm.DB {
 
 
 func (dao *{{.StructName}}Dao) Create(m *do.{{.StructName}}) error {
-	return DB().Create(m).Error
+	return dao.DB().Create(m).Error
 }
 
 func (dao *{{.StructName}}Dao) Find(m *do.{{.StructName}}) (result []*do.{{.StructName}}, err error) {
-	err = DB().Find(&result, m).Error
+	err = dao.DB().Find(&result, m).Error
 	return
 }
 
 func (dao *{{.StructName}}Dao) FindOne(m *do.{{.StructName}}) error {
-	return DB().First(m, m).Error
+	return dao.DB().First(m, m).Error
 }
 
 func (dao *{{.StructName}}Dao) FindLast(m *do.{{.StructName}}) error {
-	return DB().Last(m, m).Error
+	return dao.DB().Last(m, m).Error
 }
 
 func (dao *{{.StructName}}Dao) FindPage(m *do.{{.StructName}}, p *dbutils.Paging) (result []*do.{{.StructName}}, err error) {
 
-	db := DB()
+	db := dao.DB()
 
 	db = db.Model(m).Where(m)
 
@@ -89,52 +89,52 @@ func (dao *{{.StructName}}Dao) Get(m *do.{{.StructName}}) error {
 	if m.GetID() == 0 {
 		return errors.New("id is nil")
 	}
-	return DB().Find(m).Error
+	return dao.DB().Find(m).Error
 }
 
 func (dao *{{.StructName}}Dao) BatchGet(idbatch []int64) (result []*do.{{.StructName}}, err error) {
 	if len(idbatch) == 0 {
 		return nil, errors.New("id is nil")
 	}
-	err = DB().Model(&do.{{.StructName}}{}).Where("id in (?)", idbatch).Find(&result).Error
+	err = dao.DB().Model(&do.{{.StructName}}{}).Where("id in (?)", idbatch).Find(&result).Error
 	return
 }
 
 func (dao *{{.StructName}}Dao) Save(m *do.{{.StructName}}) error {
-	return DB().Save(m).Error
+	return dao.DB().Save(m).Error
 }
 
 func (dao *{{.StructName}}Dao) Delete(m *do.{{.StructName}}) error {
 	if m.GetID() == 0 {
 		return errors.New("id is nil")
 	}
-	return DB().Delete(m).Error
+	return dao.DB().Delete(m).Error
 }
 
 func (dao *{{.StructName}}Dao) BatchDelete(idbatch []int64) error {
 	if len(idbatch) == 0 {
 		return errors.New("id is nil")
 	}
-	return DB().Where("id in (?)", idbatch).Delete(&do.{{.StructName}}{}).Error
+	return dao.DB().Where("id in (?)", idbatch).Delete(&do.{{.StructName}}{}).Error
 }
 
 func (dao *{{.StructName}}Dao) Updates(id int64, attrs map[string]interface{}) error {
-	return DB().Model(&do.{{.StructName}}{}).Where("id = ?", id).Updates(attrs).Error
+	return dao.DB().Model(&do.{{.StructName}}{}).Where("id = ?", id).Updates(attrs).Error
 }
 
 func (dao *{{.StructName}}Dao) Update(id int64, attr string, value interface{}) error {
-	return DB().Model(&do.{{.StructName}}{}).Where("id = ?", id).Update(attr, value).Error
+	return dao.DB().Model(&do.{{.StructName}}{}).Where("id = ?", id).Update(attr, value).Error
 }
 
 func (dao *{{.StructName}}Dao) BatchUpdaterAttrs(idbatch []int64, attrs map[string]interface{}) error {
 	if len(idbatch) == 0 {
 		return errors.New("id is nil")
 	}
-	return DB().Model(&do.{{.StructName}}{}).Where("id in (?)", idbatch).Updates(attrs).Error
+	return dao.DB().Model(&do.{{.StructName}}{}).Where("id in (?)", idbatch).Updates(attrs).Error
 }
 
 func (dao *{{.StructName}}Dao) Found(m *do.{{.StructName}}) bool {
-	err := DB().First(m, m).Error
+	err := dao.DB().First(m, m).Error
 	if err != nil {
 		return false
 	} else {
