@@ -102,7 +102,7 @@ func writeModel(modelPath string, modelPackge string, mf *ModelFill) {
 }
 
 func writDao(output string) {
-	ioutil.WriteFile(output, []byte(daogo_template), 0666)
+	ioutil.WriteFile(output+"/dao.go", []byte(daogo_template), 0666)
 }
 
 type StructInfo struct {
