@@ -8,7 +8,6 @@ import (
 
 	"gorm.io/gorm"
 	"github.com/nece099/base/except"
-	"github.com/nece099/base/dbo"
 	"%v/do"
 	"github.com/nece099/base/dbutils"
 	"gorm.io/gorm/clause"
