@@ -6,6 +6,7 @@ package dao
 import (
 	"errors"
 
+	"github.com/nece099/base/dbo"
 	"github.com/nece099/base/dbutils"
 	"gorm.io/gorm"
 )
