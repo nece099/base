@@ -47,4 +47,8 @@ func likeParams(s string) string {
 	return "%" + s + "%"
 }
 
+func DB() *gorm.DB {
+	return dbo.DboInstance().DB()
+}
+
 `
