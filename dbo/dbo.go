@@ -20,6 +20,12 @@ const (
 	DB_TYPE_SQLITE = "sqlite"
 )
 
+const (
+	CONN_NORMAL = "normal" // 一般db
+	CONN_REP    = "rep"    // 复制库 只读, 读写分离
+	CONN_MEM    = "mem"    // 内存表
+)
+
 type DboConfig struct {
 	DbType      string
 	URL         string
@@ -28,11 +34,14 @@ type DboConfig struct {
 	MaxLifeTime int64
 	SqlDebug    int
 	AutoMigrate bool
+	ConnType    string
 }
 
 type Dbo struct {
 	config *gorm.Config
 	db     *gorm.DB
+	repDb  *gorm.DB
+	memDb  *gorm.DB
 	models []interface{}
 }
 
@@ -44,10 +53,50 @@ func openDb(c *DboConfig) (*gorm.DB, error) {
 		dbtype = DB_TYPE_MYSQL
 	}
 
+	connType := c.ConnType
+	if len(connType) == 0 {
+		connType = CONN_NORMAL
+	}
+
 	if dbtype == DB_TYPE_MYSQL {
+		if len(c.URL) == 0 { // 没有url则忽略
+			return nil, nil
+		}
+
 		db, err := gorm.Open(mysql.Open(c.URL), dbo.config)
 		// 设置字符编码
-		db = db.Set("gorm:table_options", "ENGINE=InnoDB CHARSET=utf8mb4")
+		if connType == CONN_MEM {
+			db = db.Set("gorm:table_options", "ENGINE=MEMORY CHARSET=utf8mb4")
+		} else {
+			db = db.Set("gorm:table_options", "ENGINE=InnoDB CHARSET=utf8mb4")
+		}
+
+		sdb, err := db.DB()
+		if err != nil {
+			Log.Error(err)
+			os.Exit(-1)
+		}
+
+		sdb.SetMaxIdleConns(c.IdleSize)
+		sdb.SetMaxOpenConns(c.MaxSize)
+		sdb.SetConnMaxLifetime(time.Duration(c.MaxLifeTime) * time.Second)
+
+		// 一般db和memdb才做自动建表
+		if connType == CONN_NORMAL || connType == CONN_MEM {
+			for _, m := range dbo.models {
+				if !db.Migrator().HasTable(m) {
+					err := db.Migrator().CreateTable(m)
+					if err != nil {
+						Log.Errorf("m = %v, err = %v", reflect.TypeOf(m), err)
+					}
+				}
+			}
+
+			if c.AutoMigrate {
+				db.AutoMigrate(dbo.models...)
+			}
+		}
+
 		return db, err
 	} else if dbtype == DB_TYPE_SQLITE {
 		db, err := gorm.Open(sqlite.Open(c.URL), dbo.config)
@@ -79,36 +128,52 @@ func DboInit(configs []*DboConfig) {
 		},
 	}
 
+	// normal db
 	db, err := openDb(c)
 	if err != nil {
 		Log.Error(err)
 		os.Exit(-1)
 	}
 
-	sdb, err := db.DB()
-	if err != nil {
-		Log.Error(err)
-		os.Exit(-1)
-	}
-
-	sdb.SetMaxIdleConns(c.IdleSize)
-	sdb.SetMaxOpenConns(c.MaxSize)
-	sdb.SetConnMaxLifetime(time.Duration(c.MaxLifeTime) * time.Second)
-
-	for _, m := range dbo.models {
-		if !db.Migrator().HasTable(m) {
-			err := db.Migrator().CreateTable(m)
-			if err != nil {
-				Log.Errorf("m = %v, err = %v", reflect.TypeOf(m), err)
-			}
-		}
-	}
-
-	if c.AutoMigrate {
-		db.AutoMigrate(dbo.models...)
-	}
-
 	dbo.db = db
+
+	// rep db
+	if len(configs) >= 2 {
+		c1 := configs[1]
+
+		if c1.ConnType != CONN_REP {
+			Log.Error("the 2nd config have to be rep db")
+			os.Exit(-1)
+		}
+
+		// rep db
+		repdb, err := openDb(c1)
+		if err != nil {
+			Log.Error(err)
+			os.Exit(-1)
+		}
+
+		dbo.repDb = repdb
+	}
+
+	// mem db
+	if len(configs) >= 3 {
+		c2 := configs[2]
+
+		if c2.ConnType != CONN_MEM {
+			Log.Error("the 3th config have to be mem db")
+			os.Exit(-1)
+		}
+
+		// rep db
+		memdb, err := openDb(c2)
+		if err != nil {
+			Log.Error(err)
+			os.Exit(-1)
+		}
+
+		dbo.memDb = memdb
+	}
 }
 
 func RegisterModels(models ...interface{}) {
@@ -122,6 +187,18 @@ func DboInstance() *Dbo {
 
 func (s *Dbo) DB() *gorm.DB {
 	db := s.db
+	sessdb := db.Session(&gorm.Session{})
+	return sessdb
+}
+
+func (s *Dbo) RepDB() *gorm.DB {
+	db := s.repDb
+	sessdb := db.Session(&gorm.Session{})
+	return sessdb
+}
+
+func (s *Dbo) MemDB() *gorm.DB {
+	db := s.memDb
 	sessdb := db.Session(&gorm.Session{})
 	return sessdb
 }
