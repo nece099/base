@@ -52,4 +52,12 @@ func DB() *gorm.DB {
 	return dbo.DboInstance().DB()
 }
 
+func RepDB() *gorm.DB {
+	return dbo.DboInstance().RepDB()
+}
+
+func MemDB() *gorm.DB {
+	return dbo.DboInstance().MemDB()
+}
+
 `
