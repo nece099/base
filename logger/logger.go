@@ -59,7 +59,7 @@ func LogInit() *Logger {
 	return Log
 }
 
-type TLogConfig struct {
+type LogConfig struct {
 	// FileName   string
 	MaxSize    int
 	MaxBackups int
@@ -67,13 +67,13 @@ type TLogConfig struct {
 	Level      string
 }
 
-func readLogConfig() *TLogConfig {
+func readLogConfig() *LogConfig {
 	filepath := "./config/log.json"
 	content, err := ioutil.ReadFile(filepath)
 	if err != nil {
 		// fmt.Printf("read log config failed, err = %v\n", err)
 		// fmt.Printf("will use default log config\n")
-		return &TLogConfig{
+		return &LogConfig{
 			MaxSize:    1024,
 			MaxBackups: 10,
 			MaxAge:     7,
@@ -81,14 +81,14 @@ func readLogConfig() *TLogConfig {
 		}
 	}
 
-	config := &TLogConfig{}
+	config := &LogConfig{}
 	d := json.NewDecoder(strings.NewReader(string(content)))
 	d.UseNumber()
 	err = d.Decode(config)
 	if err != nil {
 		fmt.Printf("invalid log config, err = %v\n", err)
 		fmt.Printf("will use default log config\n")
-		return &TLogConfig{
+		return &LogConfig{
 			MaxSize:    1024,
 			MaxBackups: 10,
 			MaxAge:     7,
@@ -101,7 +101,7 @@ func readLogConfig() *TLogConfig {
 	return config
 }
 
-// func LogInitWithConfig(config *TLogConfig) *Logger {
+// func LogInitWithConfig(config *LogConfig) *Logger {
 // 	l.Lock()
 // 	defer l.Unlock()
 // 	if Log == nil {
