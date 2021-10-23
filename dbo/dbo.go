@@ -193,12 +193,20 @@ func (s *Dbo) DB() *gorm.DB {
 
 func (s *Dbo) RepDB() *gorm.DB {
 	db := s.repDb
-	sessdb := db.Session(&gorm.Session{})
-	return sessdb
+	if db != nil {
+		sessdb := db.Session(&gorm.Session{})
+		return sessdb
+	}
+
+	return nil
 }
 
 func (s *Dbo) MemDB() *gorm.DB {
 	db := s.memDb
-	sessdb := db.Session(&gorm.Session{})
-	return sessdb
+	if db != nil {
+		sessdb := db.Session(&gorm.Session{})
+		return sessdb
+	}
+
+	return nil
 }
