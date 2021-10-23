@@ -59,6 +59,41 @@ func LogInit() *Logger {
 	return Log
 }
 
+func NewLogger(pathName string, fileName string) *Logger {
+	l.Lock()
+	defer l.Unlock()
+
+	config := &LogConfig{
+		MaxSize:    100,
+		MaxBackups: 5,
+		MaxAge:     5,
+		Level:      "DEBUG",
+	}
+
+	newLogger := &Logger{}
+	newLogger.Logger = logrus.New()
+	formatter := &TextFormatter{
+		DisableColors:   true,
+		FullTimestamp:   true,
+		TimestampFormat: "2006-01-02 15:04:05.000",
+	}
+
+	hook := NewRotateFileHook(RotateFileConfig{
+		Filename:   "./log/" + pathName + fileName + ".log",
+		MaxSize:    config.MaxSize,
+		MaxBackups: config.MaxBackups,
+		MaxAge:     config.MaxAge,
+		Formatter:  formatter,
+	})
+
+	newLogger.AddHook(hook)
+	newLogger.Formatter = formatter
+	newLogger.SetLogLevel(config.Level)
+	newLogger.Info("new logger init")
+
+	return newLogger
+}
+
 type LogConfig struct {
 	// FileName   string
 	MaxSize    int
