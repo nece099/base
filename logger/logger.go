@@ -86,12 +86,12 @@ func readLogConfig() *LogConfig {
 	d.UseNumber()
 	err = d.Decode(config)
 	if err != nil {
-		fmt.Printf("invalid log config, err = %v\n", err)
-		fmt.Printf("will use default log config\n")
+		// fmt.Printf("invalid log config, err = %v\n", err)
+		fmt.Printf("no log config found, will use default log config\n")
 		return &LogConfig{
-			MaxSize:    1024,
-			MaxBackups: 10,
-			MaxAge:     7,
+			MaxSize:    20,
+			MaxBackups: 3,
+			MaxAge:     3,
 			Level:      "DEBUG",
 		}
 	}
