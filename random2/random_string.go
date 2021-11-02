@@ -24,11 +24,13 @@ import (
 	"math/rand"
 	_ "strconv"
 	_ "strings"
+	"sync"
 	"time"
 )
 
 var (
 	defaultRand = rand.New(rand.NewSource(time.Now().UnixNano()))
+	defaultLock = &sync.Mutex{}
 )
 
 // Creates a random string based on a variety of options, using
@@ -48,6 +50,9 @@ var (
 // and predictably.
 func RandomSpec0(count uint, start, end int, letters, numbers bool,
 	chars []rune, rand *rand.Rand) string {
+	defaultLock.Lock()
+	defer defaultLock.Unlock()
+
 	if count == 0 {
 		return ""
 	}
