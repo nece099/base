@@ -5,6 +5,7 @@ package dao
 
 import (
 	"errors"
+	"sync"
 
 	"gorm.io/gorm"
 	"github.com/nece099/base/except"
@@ -14,12 +15,14 @@ import (
 )
 
 type {{.StructName}}Dao struct {
+	lock *sync.Mutex
 }
 
 var {{LowerCaseFirstLetter .StructName}}Dao *{{.StructName}}Dao = nil
 
 func New{{.StructName}}Dao() *{{.StructName}}Dao {
 	{{LowerCaseFirstLetter .StructName}}Dao = &{{.StructName}}Dao{
+		lock: &sync.Mutex{},
 	}
 	return {{LowerCaseFirstLetter .StructName}}Dao
 }
