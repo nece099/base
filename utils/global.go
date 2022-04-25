@@ -3,7 +3,7 @@ package utils
 import (
 	"bytes"
 	"encoding/hex"
-	json2 "encoding/json"
+	"encoding/json"
 	"fmt"
 	"net/url"
 	"os"
@@ -13,12 +13,9 @@ import (
 	"strings"
 	"time"
 
-	jsoniter "github.com/json-iterator/go"
 	"github.com/leekchan/accounting"
 	. "github.com/nece099/base/logger"
 )
-
-var json = jsoniter.ConfigCompatibleWithStandardLibrary
 
 func NowDateStr() string {
 	timenow := time.Now().Format(DATE_FORMAT)
@@ -33,7 +30,7 @@ func UseMaxCpu() {
 func FormatJson(instr string) string {
 
 	var out bytes.Buffer
-	json2.Indent(&out, []byte(instr), "", "  ")
+	json.Indent(&out, []byte(instr), "", "  ")
 
 	return "\n" + out.String() + "\n"
 }
